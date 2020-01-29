@@ -1,4 +1,7 @@
-
+/**
+ * Function that merges together all of the collected surveys from QR scanning
+ * @param {*} surveys 
+ */
 
 // expect surveys.length >= 1:
 // only pick team information and beach information from surveys[0]

@@ -1,3 +1,8 @@
+/**
+ * RibInput is the component used to allow the user to log data for each 
+ * item they find while scanning the beach
+ */
+
 import React, { Component } from 'react'
 import {TextInput, Text, View, ScrollView } from 'react-native'
 import {

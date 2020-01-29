@@ -1,3 +1,10 @@
+/**
+ * PublishContainer: Contains all of the functions that are used when publishing a survey,
+ * including validation, checking if there are matching beaches in the database,
+ * and collecting new surveys that were scanned in by the QR scanner. Also makes use of 
+ * functions imported in from other files in /Publish
+ */
+
 import React, { Component } from 'react';
 import {Font} from 'expo'
 import {View} from 'react-native';
@@ -140,6 +147,10 @@ export default class PublishContainer extends Component {
 
   // Merge Surveys ===========================================================
 
+  /**
+   * Re calculates the totals from the data given by the newly scanned survey
+   * @param {String} type - 'SRS' or 'AS'
+   */
   calculateTotals(type) {
     let currentSurvey = this.state.mergedSurvey
     let totals = {};
@@ -184,9 +195,15 @@ export default class PublishContainer extends Component {
     return totalsArray
   }
 
+  /**
+   * Use the survey data to check and see if this beach exists in the database. If it does,
+   * then we can ask to verify if they want to submit. If not, then we need to send them 
+   * the list of closest beaches that they can select from, or create a new beach if the
+   * beach name variation is not there.
+   * @param {*} survey 
+   */
   async checkIfBeachExists(survey){
     const beachName = survey.surveyData.beachName;
-    //Use the beach name to query the server's database
     const exists = await axios.get(`${toExport.SERVER_URL}/beaches/search`, {params: {q: beachName}})
       .then(res => {
         console.log(res.data)
@@ -382,8 +399,14 @@ export default class PublishContainer extends Component {
   }
 
 
+  /**
+   * Opens the beach modal and returns a list of beaches that are geographically 
+   * closest to it, if there is no exact match in pre-stored beach name
+   * @param {*} beachName 
+   */
   async openBeachModal(beachName) {
-    // Here's where we'll do a special query for the beaches that reside in a certain location
+    // Here's where we'll do a special query for the beaches that are closes to the one
+    //in the survey
     await axios.get(`${toExport.SERVER_URL}/beaches/search/closest`,
       {
         params: {

@@ -1,3 +1,8 @@
+/**
+ * This file is the main wrapper for the Home components, and contains the main logic
+ * for the home screen functionality
+ */
+
 import React, { Component } from 'react'
 
 import {
@@ -73,6 +78,10 @@ class HomePage extends Component {
     )
   }
 
+  /**
+   * Trigger a reload to re-fetch all of the in-progress surveys
+   * @param {list} props 
+   */
   async componentWillReceiveProps(props){
     let reload = props.navigation.getParam('reload');
     if(reload){
@@ -85,6 +94,9 @@ class HomePage extends Component {
     }
   }
 
+  /**
+   * Load in all of the fonts and surveys in progress
+   */
   async componentDidMount() {
     await Font.loadAsync({
       'Roboto': require('native-base/Fonts/Roboto.ttf'),
@@ -99,6 +111,11 @@ class HomePage extends Component {
     });
   }
 
+
+  /**
+   * Retrieve all in progress surveys and save the surveys to the state to be
+   * displayed by the home screen
+   */
   async retrieveInProgress() {
     console.log("Retrieve in Progress")
     let surveys =  await surveyDB.getNameDate();
@@ -108,6 +125,10 @@ class HomePage extends Component {
     })
   }
 
+
+  /**
+   * Refresh the page by re-rendering the in-progress surveys
+   */
   async refreshPage() {
     await this.retrieveInProgress();
     const inProgress = this.renderInProgress();
@@ -127,6 +148,10 @@ class HomePage extends Component {
     });
   }
 
+  /**
+   * Open the selected survey for further editing, retrieve all of the data
+   * associated with the survey
+   */
   async openSurvey(){
     this.cancelModal();
     let survey;
@@ -144,6 +169,11 @@ class HomePage extends Component {
       })
   }
 
+
+  /**
+   * Navigate to the publishing screen, pass the state of the selected survey
+   * to the publish container
+   */
   async navToPublish() {
     this.cancelModal();
     let survName = this.state.chosenSurvey.surveyName;
@@ -179,6 +209,12 @@ class HomePage extends Component {
     })
   }
 
+
+  /**
+   * Render all of the surveys that have been published from this phone. 
+   * If a user uploads a survey from another phone using their same log in,
+   * they will not be able to see their other surveys
+   */
   renderPublished = () => {
     const {inProgress} = this.state;
     let surveyArray = [];
@@ -204,6 +240,9 @@ class HomePage extends Component {
     this.setState({isModalVisible: true, chosenSurvey: chosenSurvey})
   }
 
+  /**
+   * Opens the modal for the QR code
+   */
   openSecondModal = () => {
     if(this.state.shouldShowDelete) {
         this.setState({
@@ -219,6 +258,9 @@ class HomePage extends Component {
     }
   }
 
+  /**
+   * Function to render the in-progress surveys on the screen
+   */
   renderInProgress = () => {
     const {inProgress} = this.state;
     let surveyArray = [];
@@ -240,6 +282,7 @@ class HomePage extends Component {
 
   }
 
+  // ----------------- QR ENCODING FUNCTIONS ----------------
   encodeToText = async () => {
     var binstring = "";
     var survey = await surveyDB.getSurvey(this.state.chosenSurvey._id);
@@ -318,7 +361,9 @@ class HomePage extends Component {
     return bin;
   }
 
-
+/**
+ * Render each component on the Home page.
+ */
   render() {
     if(this.state.pageLoading) {
       return(

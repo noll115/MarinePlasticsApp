@@ -1,3 +1,5 @@
+// DEAD CODE YOU CAN DELETE IN YOUR FORK
+// USEFUL VERSION OF THIS IS IN Publish/PublishContainer.js
 import React, { Component } from 'react';
 import { Platform, StatusBar, TouchableOpacity, StyleSheet, View, Text, } from 'react-native';
 import { Button } from 'react-native';

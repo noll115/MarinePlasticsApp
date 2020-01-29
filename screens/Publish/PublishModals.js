@@ -1,3 +1,7 @@
+/**
+ * All of the various pop up modals used in the publish section
+ */
+
 import React, { Component } from 'react';
 import {Font} from 'expo'
 import {
