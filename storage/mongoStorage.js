@@ -1,4 +1,7 @@
-
+/**
+ * Code that treats the local storage as a MongoDB datastore, using
+ * the 'react-native-local-mongodb' library
+ */
 var Datastore = require('react-native-local-mongodb');
 
 var db = new Datastore({filename: 'asyncUserSurveys', autoload: true});
@@ -22,6 +25,7 @@ let surveyDB = {
             return res
         })
     },
+    /* Retrieve all of the data from a specific survey using the survey ID as a parameter */
     getSurvey: async (survID) => {
         let survey;
         console.log(survID)
@@ -34,6 +38,7 @@ let surveyDB = {
         })
         return survey
     },
+    /* Update the data from a specific survey. Update payload should be the entire new survey */
     updateSurvey: (survID, updatePayload) => {
         return db.update({_id: survID}, updatePayload, {}, (err, res)=>{
             if(err){
@@ -42,6 +47,7 @@ let surveyDB = {
             return true;
         })
     },
+    /* Add a survey to the datastore */
     addSurvey: (newSurvey) => {
         return db.insert(newSurvey, (err, res) => {
             if(err){
@@ -50,6 +56,7 @@ let surveyDB = {
             return res;
         })
     },
+    /* Delete a survey from the datastore */
     deleteSurvey: (surveyID) => {
         return db.remove({_id: surveyID}, {}, (err, res) => {
             if(err) {
@@ -58,10 +65,8 @@ let surveyDB = {
             return res;
         })
     },
+    /* Wipes all surveys from the datastore. Better used while testing than in actual production */
     deleteAll: () => {
-        /* This method should only be used in development, and shall
-         * be deleted in production
-         */
         return db.remove({}, {multi: true}, (err, res)=>{
             console.log("Deleted everything!")
         })
